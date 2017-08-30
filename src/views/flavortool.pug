@@ -1,0 +1,114 @@
+doctype html
+html
+	head
+		script(src='https://code.jquery.com/jquery-3.2.1.min.js')
+		link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/css/materialize.min.css")
+		link(rel='stylesheet', type='text/css', href='/css/main.css')
+		script(src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/js/materialize.min.js")
+		script(type='text/javascript' src='/js/script.js')
+		title The flavor matching
+	body
+		.container
+			nav
+				.nav-wrapper
+					a.brand-logo(href='#') flavornotes
+					ul#nav-mobile.right.hide-on-med-and-down
+						li
+							a(href='/flavormatcher') matcher
+						li
+							a(href='/journal') your ideas
+						li
+							a(href='/logout') logout
+
+			#gridcontent
+			.row
+				#sidenav(class='col s12 m4 l3')
+					br
+					form(name='searchFoodPairing', id='searchIngredientForm')
+						input(type='text', name='searchIngredients', placeholder='what is your main ingredient?', id='ingredientQuery') 
+						input(type='submit', name='submit', value = 'search' id='flavor-tool-search')
+					br
+					.input-field.col.s12
+						select#categories
+						p Choose a category
+				#resultsarea(class="col s12 m8 l9 z-depth-3")
+
+						
+						
+
+	//- script.
+	//- 	//++++++++++++++++++++++++++++++++++
+
+	//- 	var request = new XMLHttpRequest();
+		
+	//- 	request.open('GET', 'https://api.foodpairing.com/taxonomies/cuisines');
+
+	//- 	request.setRequestHeader('X-Application-ID', '4d3622c7')
+	//- 	request.setRequestHeader('X-Application-Key', 'a7d005ed7abf111972bcd797aebf78ac')
+	//- 	request.setRequestHeader('X-API-Version', '1')
+	//- 	request.setRequestHeader('Accept', 'application/json')
+
+	//- 	request.onreadystatechange = function() {
+	//- 	    if (this.readyState === 4) {
+	//- 	        console.log('Status:', this.status);
+	//- 	        console.log('Headers:', this.getAllResponseHeaders());
+	//- 	        console.log('Body:', this.responseText);
+	//- 	        const cuisineData = JSON.parse(this.responseText)
+	//- 	    	console.log (cuisineData)
+
+	//- 	    }
+		    
+	//- 	};
+
+	//- 	request.send();
+
+
+	//- 	$(document).ready(function() {
+	//- 		$('select').material_select();
+	//- 		var $cuisines = $('select').material_select();
+			
+	//- 		select.html('');
+
+	//- 		$.each(cuisineData.name, function (key, val){
+	//- 			$cuisines.append('<option id=\"' + cu)
+	//- 		})
+	//- 		});
+
+
+		
+
+		
+
+	//- 	//+++++++++++++++++++
+	//- 	var ingredient = ('#ingredientQuery').val
+
+	//- 	btn.addEventListener('click',
+	//- 	    function() {
+
+	//- 	        const request = new XMLHttpRequest();
+
+	//- 	        request.open('GET', 'https://api.foodpairing.com/ingredients');
+
+	//- 	        request.setRequestHeader('X-Application-ID', '4d3622c7')
+	//- 	        request.setRequestHeader('X-Application-Key', 'a7d005ed7abf111972bcd797aebf78ac')
+	//- 	        request.setRequestHeader('X-API-Version', '1')
+	//- 	        request.setRequestHeader('Accept', 'application/json')
+
+	//- 	        request.onreadystatechange = function() {
+	//- 	            if (this.readyState === 4) {
+	//- 	                console.log('Status:', this.status);
+	//- 	                console.log('Headers:', this.getAllResponseHeaders());
+	//- 	                console.log('Body:', JSON.parse(this.responseText));
+	//- 	                var ingredientList = JSON.parse(this.responseText)
+	//- 	                response.send(ingredientList)
+	//- 	            }
+
+	//- 	        };
+
+	//- 	        request.send();
+	//- 	    })
+	//- 			<!--//1. this page must have certain inputs: a search field where you can enter a food.  
+	//- 			<!--//2. the submit button should be tied to the http object and onclick event.
+	//- 			<!--//3. there must be a designated area in which responses are displayed, using .html()
+	//- 			<!--// Then use a for loop to iterate through <!--ingrdient data and display to html
+	//- 			<!--//4. the responses must be styled in such a way that reflects th strength of the relationship between the input food and the suggested pairing.  (color opacity e.g.

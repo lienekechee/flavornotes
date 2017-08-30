@@ -1,0 +1,24 @@
+{
+  "name": "flavornotesproject",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^1.0.3",
+    "body-parser": "^1.17.2",
+    "express": "^4.15.4",
+    "express-session": "^1.15.5",
+    "handlebars": "^4.0.10",
+    "materialize-css": "^0.100.1",
+    "path": "^0.12.7",
+    "pg": "^7.2.0",
+    "pug": "^2.0.0-rc.3",
+    "sequelize": "^4.7.3",
+    "xmlhttprequest": "^1.8.0"
+  }
+}

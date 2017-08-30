@@ -1,0 +1,35 @@
+doctype html
+html
+	head
+		link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/css/materialize.min.css")
+		script(src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/js/materialize.min.js")
+		script(src='https://code.jquery.com/jquery-3.2.1.min.js')
+		link(rel='stylesheet', type='text/css', href='/css/main.css')
+		title Welcome to flavornote - the creative cook's interactive journal
+	body
+		//-if there is no user session, display registration form, with link in nav to /login.
+		//- if there is a user in session, redirect to /profile
+		
+		.container
+			#gridcontent
+				#nav
+					.navbar
+
+				#header
+					h1 Flavornote
+					h3 An interactive journal for the creative cook
+				
+				#registerform
+					h4 Sign up:
+
+					form(name='registerform', action='/register', method='POST')
+
+						input(type='text', name='username', placeholder='choose a username', required) 
+						input(type='text', name='fname', placeholder='first name', required) 
+						input(type='text', name='lname', placeholder='last name', required) 
+						input(type='text', name='email', placeholder='your email address', required) 
+						input(type='password', name='password', placeholder='Password...', required)
+						
+						input(type='submit', name='submit', value='register')
+
+				

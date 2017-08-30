@@ -1,0 +1,52 @@
+ 
+
+body {
+
+  background-color: transparent;
+  background-image:linear-gradient(0deg, transparent 24%, rgba(0, 0, 0, 0.5) 25%, rgba(0, 0, 0, 0.5) 26%, transparent 27%, transparent 74%, rgba(0, 0, 0, 0.5) 75%, rgba(0, 0, 0, 0.5) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(0, 0, 0, 0.5) 25%, rgba(0, 0, 0, 0.5) 26%, transparent 27%, transparent 74%, rgba(0, 0, 0, 0.5) 75%, rgba(0, 0, 0, 0.5) 76%, transparent 77%, transparent);
+  height:100%;
+
+  background-size:50px 50px;
+}
+
+h1, h2, h3, h4{
+  background-color: #ffffff;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0.5);
+  border-width: 0.5px;
+  opacity: 0.8;
+}
+
+
+
+#searchIngredientForm{
+  margin-top: 1em;
+}
+
+nav{
+  background-color: #ffffff;
+  color: #000000;
+  opacity: 0.8; 
+}
+
+nav a.brand-logo{
+  color: #000000;
+  opacity: 0.8;
+}
+
+nav li a{
+  color: #000000;
+  opacity: 0.8;
+}
+
+#resultsarea{
+  background-color: #ffffff;
+  margin-top: 1em;
+  width:100%;
+  height: 50em;
+  /*border-style: solid;
+  border-color: rgba(0, 0, 0, 0.5);
+  border-width: 0.5px;*/
+  opacity: 0.8;
+
+}
