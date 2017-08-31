@@ -216,34 +216,9 @@ app.get ('/flavortool', (req, res)=>{
 	res.render('flavortool')
 })
 
-//POST 	- ENTER INGREDIENT TO QUERY FOODPAIRING DATABASE
-
-// app.get ('/getingredients', (req, res) =>{
-
-// 	request.open('GET', 'https://private-anon-62aacc6f3a-foodpairingpublicapi.apiary-mock.com/ingredients');
-
-// 	request.setRequestHeader('X-Application-ID', '4d3622c7')
-// 	request.setRequestHeader('X-Application-Key', 'a7d005ed7abf111972bcd797aebf78ac')
-// 	request.setRequestHeader('X-API-Version', '1')
-// 	request.setRequestHeader('Accept', 'application/json')
-
-// 	request.onreadystatechange = function () {
-// 	  if (this.readyState === 4) {
-// 	    console.log('Status:', this.status);
-// 	    console.log('Headers:', this.getAllResponseHeaders());
-// 	    console.log('Body:', this.responseText);
-// 	  }
-// 	};
-
-// 	request.send();
-// })
-
-
-
-
-
-
-
+app.post ('/search', (req, res) =>{
+    var searchTerm = req.body.q
+})
 
 
 
