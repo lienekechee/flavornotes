@@ -9,61 +9,146 @@ html
 		title The flavor matching
 	body
 		.container
+			#gridcontent
 			nav
 				.nav-wrapper
 					a.brand-logo(href='#') flavornotes
 					ul#nav-mobile.right.hide-on-med-and-down
 						li
-							a(href='/flavormatcher') matcher
+							a(href='/flavortool') tool
 						li
 							a(href='/journal') your ideas
 						li
 							a(href='/logout') logout
 
-			#gridcontent
-			.row
-				#sidenav.col.s12.m4.l3
-					br
-					//- form#ingredientSearch(name='ingredientSearch')
-					input#q(type='text', name='q', placeholder='what is your main ingredient?') 
-					button#search() Click here
-					br
-					.input-field.col.s12
-						select#categories
-						label Choose a category
-				#resultsarea.col.s12.m8.l9.z-depth-3
-					script.
+				.row
+					#sidenav.col.s3.z-depth-3
+						br
+						//-initially placed here within a form, this input#q merely passes on its value to a $onCLick function (script.js).  Using a form attempts to send data that does not need to be sent anywhere, all functionality takes place on this page.
+						input#q(type='text', name='q', placeholder='what is your main ingredient?') 
+						button#search() Search for an ingredient
+						br
+						//-dynamically populated select element:
+						.input-field.col.s12
+							select#categories
+						#pairingscontainer
+
+							
+					#resultsarea.col.s9.z-depth-3
+						
+						script.
+							//
 							function selectIngredient(ingredient){
+							var id = ingredient.id
+					
+							console.log("This is the ingredient "+id)
 
-						//define 'id' as the data attribute set to chosen ingredient
-							//- var something = $(this)
-							//- var id = JSON.parse(something);
-						var id = ingredient.id
-						console.log("This is the ingredient "+id)
+							
+							var request = new XMLHttpRequest();
 
-						var request = new XMLHttpRequest();
+							request.open('GET', `https://api.foodpairing.com/ingredients/${id}/pairings`);
 
-						request.open('GET', `https://api.foodpairing.com/ingredients/${id}/pairings`);
+							request.setRequestHeader('X-Application-ID', '4d3622c7')
+							request.setRequestHeader('X-Application-Key', 'a7d005ed7abf111972bcd797aebf78ac')
+							request.setRequestHeader('X-API-Version', '1')
+							request.setRequestHeader('Accept', 'application/json')
 
-						request.setRequestHeader('X-Application-ID', '4d3622c7')
-						request.setRequestHeader('X-Application-Key', 'a7d005ed7abf111972bcd797aebf78ac')
-						request.setRequestHeader('X-API-Version', '1')
-						request.setRequestHeader('Accept', 'application/json')
+							request.onreadystatechange = function() {
+								if (this.readyState === 4) {
+									console.log('Status:', this.status);
+									console.log('Headers:', this.getAllResponseHeaders());
+									//- console.log('Body:', this.responseText);
+									var pairingsData = JSON.parse(this.responseText)
+									console.log(pairingsData)
 
-						request.onreadystatechange = function() {
-							if (this.readyState === 4) {
-								console.log('Status:', this.status);
-								console.log('Headers:', this.getAllResponseHeaders());
-								//- console.log('Body:', this.responseText);
-								var pairingsData = JSON.parse(this.responseText)
-								console.log(pairingsData)
+									let selectedIngredientSpan = document.getElementById(id)
 
-								//
+									$('#pairingscontainer').append(`<span id= ${id} class = ${selectedIngredientSpan.dataset.ingredientcategory} opaque >${selectedIngredientSpan.dataset.ingredientname}</span>`)
+
+
+									$('#resultsarea').html('')
+
+									//display matching ingredients
+									for(i=0; i< pairingsData.length; i++){
+										$('#resultsarea').append(`<span id= \'${pairingsData[i]._links.ingredient.id}\' + class= \'${pairingsData[i]._links.ingredient._links.categories[0].id}\' + > ${pairingsData[i]._links.ingredient.name}</span>`)
+										
+									}
+
+									function assignOpacity(){
+									for (i=0; i<pairingsData.length; i++){
+										
+										var matchValue = pairingsData[i].matches.all.abs
+										console.log (matchValue)
+										
+										var element = document.getElementById(pairingsData[i]._links.ingredient.id)
+										$(element).css('opacity', matchValue);
+										}
+										
+
+										
+
+									}
+									
+									function assignColors() {
+
+									var categoryClasses = ['38', '166', '198', '221', '241', '265', '309', '348', '357', '437', '475', '556', '564', '567', '575', '595', '600']
+									var correspondingColors = ['#41C4F0', '#C7A37A', '#F7DA95', '#A1160B', '#f47fcd', '#FBF3D5', '#A4CEEE', '#E6B844', '#FEB92C', '#60B745', '#F58A8C', '#9f4e18', '#857A61', '#D71A85', '#b04a03', 'A4D444', '#1B3E1D']
+
+
+									for (var i = 0; i < categoryClasses.length; i++) {
+
+										var classID = categoryClasses[i];
+
+										var elements = document.getElementsByClassName(classID); //targets all items belonging to a category
+										
+										for (x = 0; x < elements.length; x++) {
+											$(elements[x]).css('background-color', correspondingColors[i]);
+											
+										}
+									}
+
+
+								}
+								assignColors();
+								assignOpacity();
+								}
+							};
+
+							request.send();
 							}
-						};
 
-						request.send();
-						}
+							
+							function listByCategory() {
+							var select = document.getElementById("categories")
+							var catId = select.value
+
+							console.log("This is the catID: " + catId)
+
+							var request = new XMLHttpRequest();
+
+							request.open('GET', `https://api.foodpairing.com/ingredients?category[id]=${catId}`);
+
+							request.setRequestHeader('X-Application-ID', '4d3622c7')
+							request.setRequestHeader('X-Application-Key', 'a7d005ed7abf111972bcd797aebf78ac')
+							request.setRequestHeader('X-API-Version', '1')
+							request.setRequestHeader('Accept', 'application/json')
+
+							request.onreadystatechange = function() {
+								if (this.readyState === 4) {
+									console.log('Status:', this.status);
+									console.log('Headers:', this.getAllResponseHeaders());
+									//- console.log('Body:', this.responseText);
+									var ingredientsByCat = JSON.parse(this.responseText)
+									
+								}
+							};
+
+							request.send();
+							}
+
+							document.getElementById("categories").change = listByCategory();
+
+							
 
 
 
