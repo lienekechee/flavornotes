@@ -1,4 +1,4 @@
- 
+  
 
 body {
 
@@ -40,9 +40,11 @@ nav li a{
 }
 
 #resultsarea{
+  display: inline-block;
+  float: right;
   background-color: #ffffff;
   margin-top: 1em;
-  width:100%;
+  width:70%;
   height: 50em;
   /*border-style: solid;
   border-color: rgba(0, 0, 0, 0.5);
@@ -51,7 +53,59 @@ nav li a{
 
 }
 
-#resultsarea li {
- 
+select{
+  display: inline-block;
+  background-color: #ffffff;
+  opacity: 0.8;
 
 }
+
+span {
+ /* border-style: solid;*/
+  display: inline-flex;
+  padding: 20px;
+  margin: 5px;
+  margin-left: 5px;
+ /* border-width: 0.5px;*/
+  cursor: pointer;
+}
+
+.spanstyle{
+  opacity: 1;
+}
+
+
+
+#q {
+  background-color: #ffffff;
+  opacity: 0.8;
+  border-style: solid;
+  border-width: 0.5px;
+
+}
+
+
+/*class 38 beverages #9b42bd
+calss 166 bakery #DAC8c02
+198 cereals #F7DA95
+221 condiments 
+241 confectionary #f47fcd
+265 dairy #FDFEFD
+309 fish #A4CEEE
+348 stocks
+357 fruits #3FAAB3D
+437 herbs #60B745 #859831
+475 meat #912603
+556 nuts and seeds #9f4e18
+564 seasonings
+567 special ing
+575 spices #BO4A03
+595 trees and plants
+600 vegetables #357AO3  
+
+
+
+
+
+
+*/

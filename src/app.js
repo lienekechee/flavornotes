@@ -30,14 +30,6 @@ app.use(session({
 }))
 
 
-
-
-// request.setRequestHeader('X-Application-ID', '4d3622c7')
-// request.setRequestHeader('X-Application-Key', 'a7d005ed7abf111972bcd797aebf78ac')
-// request.setRequestHeader('X-API-Version', '1')
-// request.setRequestHeader('Accept', 'application/json')
-// // request.open('GET', 'https://api.foodpairing.com/ingredients');
-
 //DEFINITION OF TABLES+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 var User = database.define('users', {
     username: {
@@ -96,11 +88,7 @@ var Method = database.define('methods', {
 		type: Sequelize.STRING
 	}
 })
-Recipe.hasMany(Ingredient);
-Ingredient.belongsTo(Recipe);	//belongsTo adds the UUID (of eg. recipe) to the ingredient table
-User.hasMany(Recipe);
-Recipe.belongsTo(User);
-Method.belongsTo(Recipe);
+
 
 
 var RecipeIngredients = database.define('recipeingredients', {
@@ -120,6 +108,12 @@ database.sync() //{force: true}
 
 
 //RELATIONSHIPS BETWEEN TABLES+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Recipe.hasMany(Ingredient);
+Ingredient.belongsTo(Recipe);   //belongsTo adds the UUID (of eg. recipe) to the ingredient table
+User.hasMany(Recipe);
+Recipe.belongsTo(User);
+Method.belongsTo(Recipe);
 
 //ROUTES+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -216,9 +210,6 @@ app.get ('/flavortool', (req, res)=>{
 	res.render('flavortool')
 })
 
-app.post ('/search', (req, res) =>{
-    var searchTerm = req.body.q
-})
 
 
 
