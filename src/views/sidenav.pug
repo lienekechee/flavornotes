@@ -1,0 +1,12 @@
+
+input#q(type='text', name='q', placeholder='type an ingredient')
+button#search Search 
+
+br
+//-dynamically populated select element:
+//- select#categories(onchange= 'listIngredientsByCategory(this)')
+//- #pairingscontainer
+
+label Choose a category from this list:
+	input(list='categorylist', id='categories')
+	datalist#categorylist

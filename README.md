@@ -6,6 +6,5 @@ Making use of FoodPairing's API, the central functionality is a flavor matching 
 
 I want to represent the relationships between flavors visually, adjusting color and opacity to reflect categroies of food that ingredients belong to and subqeuently the strength of their relationship to selected foods.  The user will be able to save pairings and pass them along to a second functionality of the app (not yet developed), which will be a recipe development journal.  
 
-```Former UX-designer living in Amsterdam and looking for new opportunities as a web developer. I started off my career as a UX/UI designer and worked for several companies designing mobile and web applications such as the Schiphol App, Sellify Platform and TheNewMotion App. Intrigued by working closely with developers, I decided to start an intensive web development course @ NYCDA. The 3 month program taught me the basic skills required of a full-stack developer: HTML, CSS, jQuery, JavaScript, Node.js and SASS.  
-[3:08] 
+ 
 
