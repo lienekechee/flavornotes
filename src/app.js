@@ -6,9 +6,15 @@ const pg = require('pg')
 const pug = require('pug')
 const Sequelize = require('sequelize')
 const bcrypt = require('bcrypt')
+const sightengine = require('sightengine')("73493561", "EPXTnQqzEPV4TPKWvNTY");
+const ce = require('colour-extractor')
+const vision = require('@google-cloud/vision');
 
-
-const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+const client = new vision.ImageAnnotatorClient({
+  projectId: "flavornote-191619",
+  keyFilename: './flavornote-60fedd8be4a4.json',
+  key: 'AIzaSyBw1NqrQFdihd0LJTNGpR_fyZ3B095IhgU'
+});
 
 const database = new Sequelize('flavorappdb', process.env.POSTGRES_USER, null, {
     host: 'localhost',
@@ -16,6 +22,8 @@ const database = new Sequelize('flavorappdb', process.env.POSTGRES_USER, null, {
 });
 
 const app = express()
+
+// Creates a client
 
 app.set('views', './views')
 app.set('view engine', 'pug')
@@ -104,7 +112,7 @@ var RecipeIngredients = database.define('recipeingredients', {
 	}
 });
 
-database.sync() //{force: true}
+database.sync({force: true})
 
 
 //RELATIONSHIPS BETWEEN TABLES+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -120,94 +128,43 @@ Method.belongsTo(Recipe);
 //GET 	- RENDER HOMEPAGE (CONTAINS LOGIN AND REGISTER FORMS)
 
 app.get('/', (req, res) =>{
-	res.render('index', {
-		message: req.query.message,
-		user: req.session.user
-	})
+	res.render('index')
 });
 
-//POST 	- REGISTER USER
 
-app.post('/register', (req, res) =>{
 
-	const password = req.body.password
+app.post ('/vision', (req,res)=>{
+    var ingredientImage = req.body.imgUrl
+    
+    // ce.topColours(ingredientImage, true, function (colours) {
+    // console.log(colours);
+    // res.send(colours)
+    // });
 
-    bcrypt.hash(password, 8, function(err, hash) {
-        if (err !== undefined) {
-            console.log(err)
-        } else {
-            User.create({
-                    username: req.body.username,
-                    fname:req.body.fname,
-                    lname:req.body.lname,
-                    email: req.body.email,
-                    password: hash
-                })
-                .then(function() {
-                    res.redirect('/')
-                }).catch(err => {
-                    console.error(err)
-                })
-        }
-    })
-})
-//GET 	- RENDER LOGIN PAGE
+    // sightengine.check(['properties']).set_url(ingredientImage)
+    // .then(function(result) {
+    //     console.log(result)
+    //     res.json(result)
+    // })
+    // .catch(function(err) {
+    //     // handle the error
+    // });
 
-app.get('/loginform', (req,res) =>{
-	res.render ('login')
-});
 
-//POST 	- LOGIN USER
+    client
+      .imageProperties(`${ingredientImage}`)
+      .then(results => {
+        const properties = results[0].imagePropertiesAnnotation;
+        const colors = properties.dominantColors.colors;
+        colors.forEach(color => 
+            console.log(color));
+            res.send(colors)
+      })
+      .catch(err => {
+        console.error('ERROR:', err);
+      });
 
-app.post('/login', (req, res) => {
-
-    const email = req.body.email
-    const password = req.body.password
-
-    User.findOne({
-            where: {
-                username: username
-            }
-        })
-        .then(user => {
-
-            bcrypt.compare(password, user.password, function(err, result) {
-                if (err !== undefined) {
-                    console.log(err);
-                    res.redirect('/?message=' + encodeURIComponent("Invalid email or password."));
-                } else {
-                    req.session.user = user;
-                    res.redirect('/profile');
-                }
-            })
-        })
-        .catch(error => {
-            console.error(error)
-            res.redirect('/?message=' + encodeURIComponent("Invalid email or password."));
-        })
-
-})
-
-//GET 	- USER'S JOURNAL
-
-app.get('/journal', (req, res) =>{
-	const user = req.session.user
-
-	if (user){
-		Recipe.findAll({
-			where: {
-
-			}
-		})
-	}
-})
-
-//POST 	- SUBMIT FORM TO CREATE RECIPE
-
-//GET 	- FLAVOR MATCHING TOOL
-
-app.get ('/flavortool', (req, res)=>{
-	res.render('flavortool')
+    
 })
 
 
@@ -217,6 +174,62 @@ app.get ('/flavortool', (req, res)=>{
 app.listen(3000, function() {
     console.log("Listening on port 3000")
 })
+
+
+// //POST   - REGISTER USER
+
+// app.post('/register', (req, res) =>{
+
+//     const password = req.body.password
+
+//     bcrypt.hash(password, 8, function(err, hash) {
+//         if (err !== undefined) {
+//             console.log(err)
+//         } else {
+//             User.create({
+//                     username: req.body.username,
+//                     fname:req.body.fname,
+//                     lname:req.body.lname,
+//                     email: req.body.email,
+//                     password: hash
+//                 })
+//                 .then(function() {
+//                     res.redirect('/')
+//                 }).catch(err => {
+//                     console.error(err)
+//                 })
+//         }
+//     })
+// })
+
+// app.post('/login', (req, res) => {
+
+//     const username = req.body.username
+//     const password = req.body.password
+
+//     User.findOne({
+//             where: {
+//                 username: username
+//             }
+//         })
+//         .then(user => {
+
+//             bcrypt.compare(password, user.password, function(err, result) {
+//                 if (err !== undefined) {
+//                     console.log(err);
+//                     res.redirect('/?message=' + encodeURIComponent("Invalid email or password."));
+//                 } else {
+//                     req.session.user = user;
+//                     res.redirect('/flavortool');
+//                 }
+//             })
+//         })
+//         .catch(error => {
+//             console.error(error)
+//             res.redirect('/?message=' + encodeURIComponent("Invalid username or password."));
+//         })
+
+// })
 
 
 

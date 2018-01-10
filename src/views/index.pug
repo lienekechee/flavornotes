@@ -1,35 +1,122 @@
 doctype html
 html
 	head
-		link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/css/materialize.min.css")
-		script(src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/js/materialize.min.js")
 		script(src='https://code.jquery.com/jquery-3.2.1.min.js')
+		script(type='text/javascript' src='/js/script.js')
 		link(rel='stylesheet', type='text/css', href='/css/main.css')
-		title Welcome to flavornote - the creative cook's interactive journal
+		title flavornotes
+
+			//- AMENDMENTS
+				1. compartmentalize pug file includes
+				2. remove css/materialize.
+					2.1 set up CSS3 grid (navigation, resultsarea grid)
+					2.2 style search input
+					2.3 style 
+				3. set up top nav and side nav
+				4. top nav: 
+						Always: logo
+						Not logged in: Log in; Sign up
+						Logged in: Home (tool); Journal; Log out
+				5. side nav: if logged in
+						Search input
+						Select input (categories) w. datalist
+						container for pairings
+						container for saved collections
+				6. 
+
+
+
 	body
-		//-if there is no user session, display registration form, with link in nav to /login.
-		//- if there is a user in session, redirect to /profile
-		
 		.container
-			#gridcontent
-				#nav
-					.navbar
+			.header
+				include nav.pug
+			.sidenav
+				include sidenav.pug
+				.pairings
+			.main
+				.results
+		script.
+			$(document).ready(()=>{
 
-				#header
-					h1 Flavornote
-					h3 An interactive journal for the creative cook
-				
-				#registerform
-					h4 Sign up:
+				selectIngredient = function(ingredient) {
+					var id = ingredient.id
+					console.log("This is the ingredient " + id)
 
-					form(name='registerform', action='/register', method='POST')
+					var request = new XMLHttpRequest();
 
-						input(type='text', name='username', placeholder='choose a username', required) 
-						input(type='text', name='fname', placeholder='first name', required) 
-						input(type='text', name='lname', placeholder='last name', required) 
-						input(type='text', name='email', placeholder='your email address', required) 
-						input(type='password', name='password', placeholder='Password...', required)
+					request.open('GET', `https://api.foodpairing.com/ingredients/${id}/pairings`);
+
+					request.setRequestHeader('X-Application-ID', '4d3622c7')
+					request.setRequestHeader('X-Application-Key', 'a7d005ed7abf111972bcd797aebf78ac')
+					request.setRequestHeader('X-API-Version', '1')
+					request.setRequestHeader('Accept', 'application/json')
+
+					request.onreadystatechange = function() {
+						if (this.readyState === 4) {
+							console.log('Status:', this.status);
+							console.log('Headers:', this.getAllResponseHeaders());
+							//- console.log('Body:', this.responseText);
+							var pairingsData = JSON.parse(this.responseText)
+							console.log(pairingsData)
+
+							let selectedIngredientSpan = document.getElementById(id)
+
+							$('.pairings').append(
+								`<div id= '${id}' 
+								class = '${selectedIngredientSpan.dataset.ingredientcategory}'
+								style = '${selectedIngredientSpan.dataset.ingredientstyle}'>
+								${selectedIngredientSpan.dataset.ingredientname}
+								</div>`)
+
+							$('.results').html('')
+
+							//display matching ingredients
+							for (i = 0; i < pairingsData.length; i++) {
+
+
+								(function(k){
+									$.ajax({
+										method: "POST",
+										url: '/vision',
+										data: { imgUrl: pairingsData[k]._links.ingredient._links.image.size_240},
+										dataType: 'json',
+										success: function(response) {
+											console.log(response)
+
+											let color1 = `rgb(${response[0].color.red},${response[0].color.green},${response[0].color.blue})`
+											let color2 = `rgb(${response[1].color.red},${response[1].color.green},${response[1].color.blue})`
+											if (pairingsData[k].matches.all.abs <= .5) {
+												opacity = 0.5;
+											}
+											else if (pairingsData[k].matches.all.abs <= .75){
+												opacity = 0.75;
+											}
+											else {
+												opacity = 1;
+											}
+
+
+											$('.results').append(`<div onclick= "selectMatch(this)" 
+											id= '${pairingsData[k]._links.ingredient.id}' 
+											data-ingredientname = '${pairingsData[k]._links.ingredient.name}' 
+											data-ingredientcategory = ${pairingsData[k]._links.ingredient._links.categories["0"].id}, 
+											class= 'item ${pairingsData[k]._links.ingredient._links.categories["0"].id}'
+											style = 'background-color: ${color1}; color: ${color2};'
+											data-ingredientstyle = 'background-color: ${color1}; color: ${color2}; opacity: ${opacity}';
+											>${pairingsData[k]._links.ingredient.name}</div>`)
+
+											//Select match
+										}
+									})
+								})(i)
+								
+							}
+
+
+						}
+					};
+					request.send();
+				}
+			})
 						
-						input(type='submit', name='submit', value='register')
-
-				
+						
